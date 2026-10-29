@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Installed plugins",
+    "description": "Installed plugin inventory: package name first, grouped by author, market categories, paged. Read-only."
+  }
+}

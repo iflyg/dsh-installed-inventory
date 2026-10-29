@@ -1,0 +1,18 @@
+# dsh-installed-inventory bundle patch: one plugin row.
+#
+# `routeRoot` must stay under /api: the connection service authenticates every
+# /api request (Host/Origin fence + browser session cookie) before the route
+# runs. That fence is what keeps the local package inventory from being read by
+# a cross-site page.
+
+- insert:
+    - id: installed-inventory
+      name: dsh-installed-inventory
+      config:
+        enabled: true
+        routeRoot: /api/installed-inventory
+        # Empty means "follow the Host's profileContext", then $DSH_HOME.
+        profileDir: ""
+        # true adds a first-level Settings section next to the plugin page.
+        standaloneSection: false
+        ttlSeconds: 300
