@@ -1,7 +1,7 @@
 {
   "name": "dsh-installed-inventory",
-  "version": "0.3.3",
-  "description": "已安装插件清单：首列包名、按作者分组、市场分类可折叠、市场式分页与返回顶部，详情显示入口落在哪个界面位置。只读。",
+  "version": "0.4.0",
+  "description": "已安装插件清单：首列包名、按作者分组、市场分类可折叠、市场式分页与返回顶部，状态列改为双行安装时间，详情显示入口落在哪个界面位置。只读。",
   "type": "module",
   "license": "MIT",
   "main": "lib/index.js",

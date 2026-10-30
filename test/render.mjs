@@ -197,6 +197,19 @@ for (const row of rows) {
   assert.ok(/(^|@)[\w@./-]+/.test(cellText), `first cell looks like a package name: ${cellText}`);
 }
 
+// The fourth column is the install-time badge: the state palette is kept for
+// colour, but the text is a date stacked over a time.
+for (const row of rows) {
+  const cells = (row.children ?? []).filter((child) => child?.type === "td");
+  const badge = findAll(cells[3], (node) => typeof node.props?.className === "string" && node.props.className.includes("inv-state--when"))[0];
+  assert.ok(badge !== undefined, "install-time badge renders in the state column");
+  assert.ok(/inv-state--(on|off|idle|via)/.test(badge.props.className), `badge keeps a state tone: ${badge.props.className}`);
+  const stamp = text(badge);
+  assert.ok(/\d{4}-\d{2}-\d{2}/.test(stamp), `badge shows a date: ${stamp}`);
+  assert.ok(/\d{2}:\d{2}/.test(stamp), `badge shows a time: ${stamp}`);
+  assert.ok(typeof badge.props.title === "string" && badge.props.title !== "", "badge tooltip carries the state");
+}
+
 // The author header spans the whole table instead of leaving phantom cells.
 for (const group of groups) {
   const cell = (group.children ?? [])[0];

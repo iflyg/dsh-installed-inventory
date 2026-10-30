@@ -208,3 +208,42 @@ test("a newly installed package shows up as a change, not as a full surprise", a
     rmSync(join(dir, "..", ".."), { recursive: true, force: true });
   }
 });
+
+test("a package without a repo inherits the family author instead of showing none", async () => {
+  // The list groups by publisher, so `dsh-plugin-wallpaper-engine-fx` sits under
+  // `elysia395` — while its own record carries no scope and no repository. The
+  // detail panel read that empty field and printed "—", disagreeing with the
+  // list right above it. The family author is inherited, and flagged.
+  const dir = makeProfile(
+    [
+      { name: "dsh-wallpaper-engine", repo: "git+https://github.com/elysia395/dsh-wallpaper-engine.git" },
+      { name: "dsh-plugin-wallpaper-engine-fx", repo: null },
+    ],
+    {}
+  );
+  try {
+    const snapshot = await scanProfile({ profileDir: dir });
+    const fx = snapshot.plugins.find((plugin) => plugin.name === "dsh-plugin-wallpaper-engine-fx");
+    assert.equal(fx.author, "elysia395");
+    assert.equal(fx.authorFromFamily, true);
+    const owner = snapshot.plugins.find((plugin) => plugin.name === "dsh-wallpaper-engine");
+    assert.equal(owner.author, "elysia395");
+    assert.equal(owner.authorFromFamily, false);
+  } finally {
+    rmSync(join(dir, "..", ".."), { recursive: true, force: true });
+  }
+});
+
+test("every record carries an install timestamp the list can stack", async () => {
+  const dir = makeProfile([{ name: "dsh-alpha" }], {});
+  try {
+    const snapshot = await scanProfile({ profileDir: dir });
+    const alpha = snapshot.plugins[0];
+    assert.equal(typeof alpha.installedAt, "string");
+    assert.ok(alpha.installedAt.length > 0, "installedAt is populated");
+    assert.equal(Number.isNaN(new Date(alpha.installedAt).getTime()), false, "installedAt parses as a date");
+    assert.ok(new Date(alpha.installedAt).getTime() <= Date.now(), "install time is not in the future");
+  } finally {
+    rmSync(join(dir, "..", ".."), { recursive: true, force: true });
+  }
+});
