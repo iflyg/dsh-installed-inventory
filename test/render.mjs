@@ -255,6 +255,42 @@ const bigTree = renderPanel();
 assert.ok(findAll(bigTree, (node) => node.props?.className === "inv-top").length === 1, "back-to-top button appears above 20 rows");
 states[11] = 20;
 
+// The install-time header is a three-state sort control, and sorting is a
+// GROUP-level ordering (families rank by their newest member).
+const sortHead = findAll(tree, (node) => typeof node.props?.className === "string" && node.props.className.includes("inv-th-sort"))[0];
+assert.ok(sortHead !== undefined, "install-time header is a sort control");
+sortHead.props.onClick();
+states[16] = "desc";
+const descTree = renderPanel();
+const descGroups = findAll(descTree, (node) => node.props?.className === "inv-group");
+assert.ok(descGroups.length > 0, "sorted family view still renders group headers");
+assert.ok(
+  findAll(descTree, (node) => typeof node.props?.className === "string" && node.props.className.includes("inv-th-sort")).some(
+    (node) => text(node) === "colState▼" || text(node).includes("▼")
+  ),
+  "sort header shows the descending arrow"
+);
+states[16] = "none";
+
+// A package with UI-text fingerprints exposes them in the detail sheet, so a
+// hit like 「起子插件设置」→ dsh-brief-sidebar can be explained in place.
+const withTexts = snapshot.plugins.find((plugin) => (plugin.uiTexts ?? []).length > 0);
+if (withTexts !== undefined) {
+  states[12] = withTexts.name;
+  tree = renderPanel();
+  const textEffects = effects;
+  effects = [];
+  for (const effect of textEffects) effect();
+  await new Promise((resolve) => realSetInterval(resolve, 30));
+  tree = renderPanel();
+  assert.ok(text(tree).includes("dUiTexts"), "detail sheet shows the interface-text section");
+  assert.ok(
+    findAll(tree, (node) => typeof node.props?.className === "string" && node.props.className === "inv-uitext").length > 0,
+    "interface texts render as pills"
+  );
+  states[12] = "";
+}
+
 // Flat view: seven columns, no author headers. `view` is the eighth useState in
 // the panel, so flipping its slot is enough to re-render down that branch.
 states[7] = "flat";
