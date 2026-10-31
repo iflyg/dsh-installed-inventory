@@ -1,9 +1,17 @@
 {
   "name": "dsh-installed-inventory",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "已安装插件清单：首列包名、按作者分组、市场分类可折叠、市场式分页与返回顶部，安装时间双行徽章并可按分组排序，详情显示入口位置与界面文字特征。只读。",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iflyg/dsh-installed-inventory.git"
+  },
+  "homepage": "https://github.com/iflyg/dsh-installed-inventory#readme",
+  "bugs": {
+    "url": "https://github.com/iflyg/dsh-installed-inventory/issues"
+  },
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
