@@ -19,7 +19,8 @@
     "cordis.patch.yml",
     "README.md",
     "LICENSE",
-    "docs/**/*.png"
+    "docs/**/*.png",
+    "CHANGELOG.md"
   ],
   "keywords": [
     "dsh",

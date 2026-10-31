@@ -93,6 +93,10 @@ node -e "const f='package.json',p=require('./'+f);p.dsh.profile.bundles.push('ds
 
 `detail` 只接受清单内已有的包名，不提供任意路径读取。
 
+## 版本历史
+
+当前 **v0.5.0**。每一版做了什么、为什么改，见 [CHANGELOG.md](CHANGELOG.md)；仓库按 `vX.Y.Z` 打了标签，可直接切到某一版。
+
 ## 开发
 
 ```bash
